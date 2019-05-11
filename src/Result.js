@@ -81,9 +81,6 @@ export default class Result extends React.Component {
       citingAuthors: [],
       citedAuthors: [],
       others: [],
-      citingAuthorsItem: '',
-      citedAuthorsItem: '',
-      othersItem: '',
     }
   }
 
@@ -123,28 +120,10 @@ export default class Result extends React.Component {
         )
   }
 
-  setAddItemState = (value, type) => {
-    if(type == 'Citing') {
-      this.setState({
-        citingAuthorsItem: value,
-      });
-    }
-    else if(type == 'Cited') {
-      this.setState({
-        citedAuthorsItem: value,
-      });
-    }
-    else {
-      this.setState({
-        othersItem: value,
-      });
-    }
-  }
-
-  addItem = (type) => {
+  addItem = (item, type) => {
     if(type == 'Citing') {
       var citingAuthors = this.state.citingAuthors;
-      citingAuthors.unshift(this.state.citingAuthorsItem);
+      citingAuthors.unshift(item);
       this.setState({
         citingAuthors: citingAuthors,
         citingAuthorsItem: '',
@@ -152,7 +131,7 @@ export default class Result extends React.Component {
     }
     else if(type == 'Cited') {
       var citedAuthors = this.state.citedAuthors;
-      citedAuthors.unshift(this.state.citedAuthorsItem);
+      citedAuthors.unshift(item);
       this.setState({
         citedAuthors: citedAuthors,
         citedAuthorsItem: '',
@@ -160,7 +139,7 @@ export default class Result extends React.Component {
     }
     else {
       var others = this.state.others;
-      others.unshift(this.state.othersItem);
+      others.unshift(item);
       this.setState({
         others: others,
         othersItem: '',
@@ -213,8 +192,6 @@ export default class Result extends React.Component {
             <EditableList
             type='Citing'
             authors={citingAuthors}
-            item={citingAuthorsItem}
-            setAddItemState={this.setAddItemState}
             addItem={this.addItem}
             deleteItem={this.deleteItem}
             />
@@ -224,8 +201,6 @@ export default class Result extends React.Component {
             <EditableList
             type='Cited'
             authors={citedAuthors}
-            item={citedAuthorsItem}
-            setAddItemState={this.setAddItemState}
             addItem={this.addItem}
             deleteItem={this.deleteItem}
             />
@@ -235,8 +210,6 @@ export default class Result extends React.Component {
             <EditableList
             type='Other'
             authors={others}
-            item={othersItem}
-            setAddItemState={this.setAddItemState}
             addItem={this.addItem}
             deleteItem={this.deleteItem}
             />

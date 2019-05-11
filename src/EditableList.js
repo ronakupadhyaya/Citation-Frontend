@@ -59,10 +59,24 @@ export default class EditableList extends React.Component {
     if(this.props.authors !== prevProps.authors || this.props.item !== prevProps.item) {
       const { authors, item } = this.props;
       this.setState({
-        item: item,
+        item: '',
         authors: authors,
       })
     }
+  }
+
+  setAddItemState = (value) => {
+    this.setState({
+      item: value,
+    });
+  }
+
+  addItem = (value) => {
+    const { type, addItem } = this.props;
+    addItem(this.state.item, type);
+    this.setState({
+      item: '',
+    });
   }
 
   renderList() {
@@ -95,7 +109,6 @@ export default class EditableList extends React.Component {
 
   render() {
     const { item } = this.state;
-    const { setAddItemState, type, addItem } = this.props;
 
     return (
       <div style={containerStyle}>
@@ -104,11 +117,11 @@ export default class EditableList extends React.Component {
           placeholder='Add Name'
           disableUnderline={true}
           value={item}
-          onChange={event => setAddItemState(event.target.value, type)}
+          onChange={event => this.setAddItemState(event.target.value)}
         />
         <AddIcon
         style={deleteIconStyle}
-        onClick={() => addItem(type)}
+        onClick={() => this.addItem()}
         />
         </ListItem>
         {this.renderList()}
