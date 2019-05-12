@@ -1,6 +1,8 @@
 import React from 'react';
 import InputBase from '@material-ui/core/Input';
 import SearchIcon from '@material-ui/icons/Search';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
 
 const containerStyle = {
   display: 'flex',
@@ -36,9 +38,20 @@ const searchInputStyle = {
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: '',
+    }
+  }
+
+  setNameState = (value) => {
+    this.setState({
+      name: value,
+    })
   }
 
   render() {
+    const { name } = this.state;
+
     return (
       <div style={containerStyle}>
       <div style={headerStyle}>
@@ -49,8 +62,15 @@ export default class Home extends React.Component {
             placeholder="Your Name"
             disableUnderline={true}
             style={searchInputStyle}
+            value={name}
+            onChange={event => this.setNameState(event.target.value)}
           />
-          <SearchIcon />
+          <Link to={{
+            pathname: '/search',
+            name: name,
+          }}>
+            <SearchIcon />
+          </Link>
       </div>
     </div>
     );

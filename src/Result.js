@@ -91,7 +91,8 @@ export default class Result extends React.Component {
   }
 
   componentWillMount() {
-    fetch("http://localhost:8080/Citation-Backend/getCitingAuthors")
+    const { name } = this.props.location;
+    fetch("http://localhost:8080/Citation-Backend/getCitingAuthors?name=" + name)
       .then(res => res.json())
       .then(
         (result) => {
@@ -105,7 +106,7 @@ export default class Result extends React.Component {
         }
       )
 
-      fetch("http://localhost:8080/Citation-Backend/getCitedAuthors")
+      fetch("http://localhost:8080/Citation-Backend/getCitedAuthors?name=" + name)
         .then(res => res.json())
         .then(
           (result) => {
@@ -118,6 +119,17 @@ export default class Result extends React.Component {
             console.log(error);
           }
         )
+  }
+
+  generateSchedule = () => {
+    const { citingAuthors, citedAuthors, others } = this.state;
+    const authors = citingAuthors.concat(citedAuthors).concat(others);
+    this.props.history.push({
+      pathname: 'calendar',
+      state: {
+        authors: authors,
+      }
+    });
   }
 
   addItem = (item, type) => {
@@ -220,7 +232,11 @@ export default class Result extends React.Component {
           before generating your schedule
         </div>
         <div style={footerStyle}>
-          <Button variant="contained" size='medium'>
+          <Button
+          variant="contained"
+          size='medium'
+          onClick={() => this.generateSchedule()}
+          >
             <div style={buttonStyle}>
               Generate my JSM schedule
             </div>
