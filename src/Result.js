@@ -81,6 +81,7 @@ export default class Result extends React.Component {
       citingAuthors: [],
       citedAuthors: [],
       others: [],
+      loading: true,
     }
   }
 
@@ -90,7 +91,7 @@ export default class Result extends React.Component {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { name } = this.props.location;
     fetch("http://localhost:8080/Citation-Backend/getCitingAuthors?name=" + name)
       .then(res => res.json())
@@ -100,25 +101,31 @@ export default class Result extends React.Component {
           this.setState({
             citingAuthors: citingAuthors,
           });
+          fetch("http://localhost:8080/Citation-Backend/getCitedAuthors?name=" + name)
+            .then(res => res.json())
+            .then(
+              (result) => {
+                const citedAuthors = result.map(item => item.name);
+                this.setState({
+                  citedAuthors: citedAuthors,
+                  loading: false,
+                });
+              },
+              (error) => {
+                console.log(error);
+                this.setState({
+                  loading: false,
+                });
+              }
+            )
         },
         (error) => {
           console.log(error);
+          this.setState({
+            loading: false,
+          });
         }
       )
-
-      fetch("http://localhost:8080/Citation-Backend/getCitedAuthors?name=" + name)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            const citedAuthors = result.map(item => item.name);
-            this.setState({
-              citedAuthors: citedAuthors,
-            });
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
   }
 
   generateSchedule = () => {
@@ -191,7 +198,12 @@ export default class Result extends React.Component {
       citingAuthorsItem,
       citedAuthorsItem,
       othersItem,
+      loading,
     } = this.state;
+
+    if(loading) {
+      return null;
+    }
 
     return (
       <div style={containerStyle}>

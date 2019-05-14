@@ -49,6 +49,16 @@ export default class Home extends React.Component {
     })
   }
 
+  onKeyDown = (key, value) => {
+    console.log(key, value);
+    if (key === 'Enter') {
+      this.props.history.push({
+        pathname: '/search',
+        name: value,
+      });
+    }
+  }
+
   render() {
     const { name } = this.state;
 
@@ -64,6 +74,7 @@ export default class Home extends React.Component {
             style={searchInputStyle}
             value={name}
             onChange={event => this.setNameState(event.target.value)}
+            onKeyDown={event => this.onKeyDown(event.key, event.target.value)}
           />
           <Link to={{
             pathname: '/search',

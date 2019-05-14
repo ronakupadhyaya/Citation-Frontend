@@ -12,6 +12,8 @@ export default class Calendar extends React.Component {
     this.state = {
       speakerEvents: [],
       authorEvents: [],
+      selfEvents: [],
+      loading: true,
     }
   }
 
@@ -28,6 +30,7 @@ export default class Calendar extends React.Component {
     const json = JSON.parse(responseText);
     var speakerEvents = json['Speaker'];
     var authorEvents = json['Author'];
+    var selfEvents = json['Self'];
     speakerEvents = speakerEvents.map(event => {
       var newEvent = Object.assign({}, event);
       newEvent.color = '#2979ff';
@@ -42,14 +45,26 @@ export default class Calendar extends React.Component {
       newEvent.end = new Date(event.end);
       return newEvent;
     });
+    selfEvents = selfEvents.map(event => {
+      var newEvent = Object.assign({}, event);
+      newEvent.color = '#ff3d00';
+      newEvent.start = new Date(event.start);
+      newEvent.end = new Date(event.end);
+      return newEvent;
+    });
     console.log(speakerEvents);
     this.setState({
       speakerEvents: speakerEvents,
       authorEvents: authorEvents,
+      selfEvents: selfEvents,
+      loading: false,
     })
   })
   .catch((error) => {
     console.log(error);
+    this.setState({
+      loading: false,
+    });
   });
   }
 
@@ -65,8 +80,13 @@ export default class Calendar extends React.Component {
   };
 
   render() {
-    const { authorEvents, speakerEvents } = this.state;
-    const events = authorEvents.concat(speakerEvents);
+    const { authorEvents, speakerEvents, selfEvents, loading } = this.state;
+    const events = authorEvents.concat(speakerEvents).concat(selfEvents);
+
+    if(loading) {
+      return false;
+    }
+
     return (
       <BigCalendar
         events={events}
