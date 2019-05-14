@@ -77,7 +77,7 @@ export default class Result extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: 'Google Calendar',
+      selected: 'Calendar View',
       citingAuthors: [],
       citedAuthors: [],
       others: [],
@@ -129,6 +129,22 @@ export default class Result extends React.Component {
   }
 
   generateSchedule = () => {
+    const { selected } = this.state;
+    if(selected == 'Calendar View') {
+      this.openCalendarView();
+    }
+    else if(selected == 'Google Calendar') {
+      this.openGoogleCalendarInstructions();
+    }
+    else if(selected == 'iCal') {
+      this.openiCalInstructions();
+    }
+    else {
+      this.openTextInstructions();
+    }
+  }
+
+  openCalendarView = () => {
     const { citingAuthors, citedAuthors, others } = this.state;
     const authors = citingAuthors.concat(citedAuthors).concat(others);
     this.props.history.push({
@@ -138,6 +154,54 @@ export default class Result extends React.Component {
       }
     });
   }
+
+  openGoogleCalendarInstructions = () => {
+    const { citingAuthors, citedAuthors, others } = this.state;
+    const authors = citingAuthors.concat(citedAuthors).concat(others);
+    this.props.history.push({
+      pathname: 'instructions',
+      state: {
+        authors: authors,
+        view: 'Google Calendar'
+      },
+    });
+  };
+
+  openiCalInstructions = () => {
+    const { citingAuthors, citedAuthors, others } = this.state;
+    const authors = citingAuthors.concat(citedAuthors).concat(others);
+    this.props.history.push({
+      pathname: 'instructions',
+      state: {
+        authors: authors,
+        view: 'iCal'
+      },
+    });
+  };
+
+  openTextInstructions = () => {
+    const { citingAuthors, citedAuthors, others } = this.state;
+    const authors = citingAuthors.concat(citedAuthors).concat(others);
+    fetch("http://localhost:8080/Citation-Backend/getText", {
+      method: 'POST',
+      body: JSON.stringify({
+        authors: authors,
+      })
+    })
+    .then(res => res.blob())
+    .then(
+      (blob) => {
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(blob);
+        element.download = "schedule.txt";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  };
 
   addItem = (item, type) => {
     if(type == 'Citing') {
@@ -254,6 +318,14 @@ export default class Result extends React.Component {
             </div>
           </Button>
           <div>
+          <Radio
+            style={radioStyle}
+            checked={selected == 'Calendar View'}
+            icon={<RadioButtonUncheckedIcon fontSize="small" />}
+            checkedIcon={<RadioButtonCheckedIcon fontSize="small" />}
+            onChange={() => this.setRadioButtonChange('Calendar View')}
+          />
+          Calendar View
           <Radio
             style={radioStyle}
             checked={selected == 'Google Calendar'}

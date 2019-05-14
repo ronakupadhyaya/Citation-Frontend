@@ -5,8 +5,8 @@ import Home from './Home';
 import Result from './Result';
 import Calendar from './Calendar';
 import GoogleCalendarInstructions from './GoogleCalendarInstructions';
-import CalendarInstructions from './CalendarInstructions';
-
+import ICalInstructions from './ICalInstructions';
+import Instructions from './Instructions';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,10 +17,10 @@ export default class App extends React.Component {
     const { navigation } = this.props;
     return (
       <Router>
-        <Route exact path="/" component={CalendarInstructions} />
+        <Route exact path="/" component={Home} />
         <Route path="/search" component={Result} />
         <Route path="/calendar" component={Calendar} />
-        <Route path="/instructions" component={GoogleCalendarInstructions} />
+        <Route path="/instructions" component={Instructions} />
       </Router>
     );
   }
