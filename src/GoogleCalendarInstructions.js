@@ -16,9 +16,17 @@ const headerStyle = {
   textAlign: 'center',
 };
 
+const downloadStyle = {
+  fontSize: 15,
+  marginLeft: 20,
+  marginBottom: 5,
+  fontWeight: 'bold',
+};
+
 const paragraphStyle = {
   fontSize: 15,
   marginLeft: 20,
+  marginBottom: 5,
 }
 
 const stepHeaderStyle = {
@@ -52,12 +60,58 @@ export default class GoogleCalendarInstructions extends React.Component {
     super(props);
   }
 
+  componentWillMount() {
+    const { authors } = this.props;
+    fetch("http://localhost:8080/Citation-Backend/getSpeakerCalendar", {
+      method: 'POST',
+      body: JSON.stringify({
+        authors: authors,
+      })
+    })
+    .then(res => res.blob())
+    .then(
+      (blob) => {
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(blob);
+        element.download = "speakercalendar.ics";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+
+    fetch("http://localhost:8080/Citation-Backend/getAuthorCalendar", {
+      method: 'POST',
+      body: JSON.stringify({
+        authors: authors,
+      })
+    })
+    .then(res => res.blob())
+    .then(
+      (blob) => {
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(blob);
+        element.download = "authorcalendar.ics";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+
   render() {
 
     return (
     <div style={containerStyle}>
       <div style={headerStyle}>
         Import calendar to Google Calendar
+      </div>
+      <div style={downloadStyle}>
+        Your download will begin shortly.
       </div>
       <div style={paragraphStyle}>
         You can transfer your events from a different calendar application or Google Account to Google Calendar.
@@ -67,7 +121,7 @@ export default class GoogleCalendarInstructions extends React.Component {
         Step 1: Open Google Calendar
       </div>
       <div style={paragraphStyle}>
-        Navigate to https://calendar.google.com
+        Navigate to calendar.google.com
       </div>
 
       <div style={stepHeaderStyle}>
@@ -79,27 +133,26 @@ export default class GoogleCalendarInstructions extends React.Component {
       <img style={stepOneImageStyle} src={step1} />
 
       <div style={stepHeaderStyle}>
-        Step 3: From URL
+        Step 3: Select Import
       </div>
       <div style={paragraphStyle}>
-        Click on the 'From URL' option from the pop-up
+        Click on the 'Import' option from the pop-up
       </div>
       <img style={stepTwoImageStyle} src={step2} />
 
       <div style={stepHeaderStyle}>
-        Step 4: Enter URL
+        Step 4: Select Calendar
       </div>
       <div style={paragraphStyle}>
-        Enter the following URL in the textbox:
-        https://calendar.google.com/calendar/ical/t30d498ub4icaegmjab3k7podo%40group.calendar.google.com/public/basic.ics
+        Click on 'Select file from your computer' and browse to locate the calendar .ics file to import.
       </div>
       <img style={stepThreeImageStyle} src={step3} />
 
       <div style={stepHeaderStyle}>
-        Step 5: Add Calendar
+        Step 5: Import
       </div>
       <div style={paragraphStyle}>
-        Click on the 'Add Calendar' button
+        Click on the 'Import' button
       </div>
       <img style={stepThreeImageStyle} src={step4} />
     </div>

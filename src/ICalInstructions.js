@@ -15,9 +15,17 @@ const headerStyle = {
   textAlign: 'center',
 };
 
+const downloadStyle = {
+  fontSize: 15,
+  marginLeft: 20,
+  marginBottom: 5,
+  fontWeight: 'bold',
+};
+
 const paragraphStyle = {
   fontSize: 15,
   marginLeft: 20,
+  marginBottom: 5,
 }
 
 const stepHeaderStyle = {
@@ -51,12 +59,58 @@ export default class ICalInstructions extends React.Component {
     super(props);
   }
 
+  componentWillMount() {
+    const { authors } = this.props;
+    fetch("http://localhost:8080/Citation-Backend/getSpeakerCalendar", {
+      method: 'POST',
+      body: JSON.stringify({
+        authors: authors,
+      })
+    })
+    .then(res => res.blob())
+    .then(
+      (blob) => {
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(blob);
+        element.download = "speakercalendar.ics";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+
+    fetch("http://localhost:8080/Citation-Backend/getAuthorCalendar", {
+      method: 'POST',
+      body: JSON.stringify({
+        authors: authors,
+      })
+    })
+    .then(res => res.blob())
+    .then(
+      (blob) => {
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(blob);
+        element.download = "authorcalendar.ics";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+
   render() {
 
     return (
     <div style={containerStyle}>
       <div style={headerStyle}>
         Import calendar to iCal
+      </div>
+      <div style={downloadStyle}>
+        Your download will begin shortly.
       </div>
       <div style={paragraphStyle}>
         You can transfer your events from a different calendar application to iCal.
@@ -67,7 +121,7 @@ export default class ICalInstructions extends React.Component {
       </div>
 
       <div style={stepHeaderStyle}>
-        Step 2: Import
+        Step 2: Select Import
       </div>
       <div style={paragraphStyle}>
         Go to File>Import. In the Import section File field, browse to locate the calendar .ics file to import.

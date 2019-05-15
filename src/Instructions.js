@@ -9,16 +9,16 @@ export default class instructions extends React.Component {
 
 
   render() {
-    const { view } = this.props.location.state;
+    const { view, authors } = this.props.location.state;
 
     if(view == 'Google Calendar') {
       return (
-        <GoogleCalendarInstructions />
+        <GoogleCalendarInstructions authors={authors} />
       );
     }
     else {
       return (
-        <ICalInstructions />
+        <ICalInstructions authors={authors} />
       );
     }
   }
