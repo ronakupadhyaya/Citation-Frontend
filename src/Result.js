@@ -91,41 +91,43 @@ export default class Result extends React.Component {
     })
   }
 
+  formatString = (str) => {
+    return str
+    .replace(/(\B)[^ ]*/g,match =>(match.toLowerCase()))
+    .replace(/^[^ ]/g,match=>(match.toUpperCase()));
+  }
+
+
+
   componentDidMount() {
     const { name } = this.props.location;
-    fetch("http://localhost:8080/Citation-Backend/getCitingAuthors?name=" + name)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          const citingAuthors = result.map(item => item.name);
-          this.setState({
-            citingAuthors: citingAuthors,
-          });
-          fetch("http://localhost:8080/Citation-Backend/getCitedAuthors?name=" + name)
-            .then(res => res.json())
-            .then(
-              (result) => {
-                const citedAuthors = result.map(item => item.name);
-                this.setState({
-                  citedAuthors: citedAuthors,
-                  loading: false,
-                });
-              },
-              (error) => {
-                console.log(error);
-                this.setState({
-                  loading: false,
-                });
-              }
-            )
-        },
-        (error) => {
-          console.log(error);
-          this.setState({
-            loading: false,
-          });
-        }
-      )
+    fetch("http://localhost:8080/Citation-Backend/getAuthors?name=" + name)
+    .then((response) => response.text())
+    .then((responseText) => {
+      const json = JSON.parse(responseText);
+      var citedAuthors = json['Cited Authors'];
+      var citingAuthors = json['Citing Authors'];
+
+      citedAuthors = citedAuthors.map(author => author.name);
+      citedAuthors = citedAuthors.filter(author => !author.includes("null"));
+      citedAuthors = citedAuthors.map(author => this.formatString(author));
+
+      citingAuthors = citingAuthors.map(author => author.name);
+      citingAuthors = citingAuthors.filter(author => !author.includes("null"));
+      citingAuthors = citingAuthors.map(author => this.formatString(author));
+
+      this.setState({
+        citingAuthors: citingAuthors,
+        citedAuthors: citedAuthors,
+        loading: false,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      this.setState({
+        loading: false,
+      });
+    });
   }
 
   generateSchedule = () => {
