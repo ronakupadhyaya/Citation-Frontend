@@ -182,7 +182,7 @@ export default class Result extends React.Component {
   openTextInstructions = () => {
     const { citingAuthors, citedAuthors, others } = this.state;
     const authors = citingAuthors.concat(citedAuthors).concat(others);
-    fetch("http://localhost:8080/Citation-Backend/getText", {
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getText", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,
