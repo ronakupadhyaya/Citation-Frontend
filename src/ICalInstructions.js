@@ -61,7 +61,7 @@ export default class ICalInstructions extends React.Component {
 
   componentWillMount() {
     const { authors } = this.props;
-    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSpeakerCalendar", {
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSpeakerCalendar", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,
@@ -81,7 +81,7 @@ export default class ICalInstructions extends React.Component {
       }
     )
 
-    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthorCalendar", {
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthorCalendar", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,
