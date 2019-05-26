@@ -101,7 +101,7 @@ export default class Result extends React.Component {
 
   componentDidMount() {
     const { name } = this.props.location;
-    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthors?name=" + name)
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthors?name=" + name)
     .then((response) => response.text())
     .then((responseText) => {
       const json = JSON.parse(responseText);
@@ -182,7 +182,7 @@ export default class Result extends React.Component {
   openTextInstructions = () => {
     const { citingAuthors, citedAuthors, others } = this.state;
     const authors = citingAuthors.concat(citedAuthors).concat(others);
-    fetch("http://localhost:8080/Citation-Backend/getText", {
+    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getText", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,
