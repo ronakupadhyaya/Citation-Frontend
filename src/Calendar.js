@@ -19,7 +19,7 @@ export default class Calendar extends React.Component {
 
   componentWillMount() {
     const { authors } = this.props.location.state;
-    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSchedule", {
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSchedule", {
     method: 'POST',
     body: JSON.stringify({
       authors: authors,
