@@ -19,7 +19,7 @@ export default class Calendar extends React.Component {
 
   componentWillMount() {
     const { authors } = this.props.location.state;
-    fetch("http://localhost:8080/Citation-Backend/getSchedule", {
+    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSchedule", {
     method: 'POST',
     body: JSON.stringify({
       authors: authors,
@@ -31,6 +31,7 @@ export default class Calendar extends React.Component {
     var speakerEvents = json['Speaker'];
     var authorEvents = json['Author'];
     var selfEvents = json['Self'];
+    console.log(speakerEvents);
     speakerEvents = speakerEvents.map(event => {
       var newEvent = Object.assign({}, event);
       newEvent.color = '#2979ff';
@@ -52,7 +53,6 @@ export default class Calendar extends React.Component {
       newEvent.end = new Date(event.end);
       return newEvent;
     });
-    console.log(speakerEvents);
     this.setState({
       speakerEvents: speakerEvents,
       authorEvents: authorEvents,

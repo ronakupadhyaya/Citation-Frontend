@@ -62,7 +62,7 @@ export default class GoogleCalendarInstructions extends React.Component {
 
   componentWillMount() {
     const { authors } = this.props;
-    fetch("http://localhost:8080/Citation-Backend/getSpeakerCalendar", {
+    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getSpeakerCalendar", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,
@@ -82,7 +82,7 @@ export default class GoogleCalendarInstructions extends React.Component {
       }
     )
 
-    fetch("http://localhost:8080/Citation-Backend/getAuthorCalendar", {
+    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthorCalendar", {
       method: 'POST',
       body: JSON.stringify({
         authors: authors,

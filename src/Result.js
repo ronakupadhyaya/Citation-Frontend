@@ -101,7 +101,7 @@ export default class Result extends React.Component {
 
   componentDidMount() {
     const { name } = this.props.location;
-    fetch("http://localhost:8080/Citation-Backend/getAuthors?name=" + name)
+    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthors?name=" + name)
     .then((response) => response.text())
     .then((responseText) => {
       const json = JSON.parse(responseText);
@@ -110,11 +110,9 @@ export default class Result extends React.Component {
 
       citedAuthors = citedAuthors.map(author => author.name);
       citedAuthors = citedAuthors.filter(author => !author.includes("null"));
-      citedAuthors = citedAuthors.map(author => this.formatString(author));
 
       citingAuthors = citingAuthors.map(author => author.name);
       citingAuthors = citingAuthors.filter(author => !author.includes("null"));
-      citingAuthors = citingAuthors.map(author => this.formatString(author));
 
       this.setState({
         citingAuthors: citingAuthors,
