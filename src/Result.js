@@ -101,7 +101,7 @@ export default class Result extends React.Component {
 
   componentDidMount() {
     const { name } = this.props.location;
-    fetch("http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthors?name=" + name)
+    fetch("https://cors-anywhere.herokuapp.com/http://citation-env.t9nubywtms.us-east-2.elasticbeanstalk.com/getAuthors?name=" + name)
     .then((response) => response.text())
     .then((responseText) => {
       const json = JSON.parse(responseText);
