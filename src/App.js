@@ -9,14 +9,11 @@ import ICalInstructions from './ICalInstructions';
 import Instructions from './Instructions';
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { navigation } = this.props;
     return (
-      <Router basename="/Citation-Frontend">
+      <Router basename="/jsmschedule">
         <Route exact path="/" component={Home} />
         <Route path="/search" component={Result} />
         <Route path="/calendar" component={Calendar} />
